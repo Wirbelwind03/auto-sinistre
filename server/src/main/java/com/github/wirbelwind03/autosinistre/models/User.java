@@ -1,6 +1,7 @@
 package com.github.wirbelwind03.autosinistre.models;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,6 +12,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "USERS")
+@Builder
 public class User implements UserDetails {
 
     @Id
@@ -22,6 +24,9 @@ public class User implements UserDetails {
 
     @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false)
+    private Role role;
 
 
     @Override
