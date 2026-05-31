@@ -2,6 +2,7 @@ package com.github.wirbelwind03.autosinistre.controllers;
 
 import com.github.wirbelwind03.autosinistre.models.Vehicle;
 import com.github.wirbelwind03.autosinistre.repositories.VehicleRepository;
+import com.github.wirbelwind03.autosinistre.services.VehicleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -18,15 +19,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class VehicleController {
 
-    private final VehicleRepository vehicleRepository;
+    private final VehicleService vehicleService;
 
     @GetMapping
     public ResponseEntity<List<Vehicle>> getAllVehicles(){
         try{
-            List<Vehicle> vehicles = new ArrayList<>();
-
-            vehicles = vehicleRepository.findAll();
-
+            List<Vehicle> vehicles = vehicleService.getAllVehicles();
             return new ResponseEntity<>(vehicles, HttpStatus.OK);
         } catch (Exception e){
             return new ResponseEntity<>((HttpHeaders) null, HttpStatus.INTERNAL_SERVER_ERROR);
