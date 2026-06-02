@@ -1,6 +1,8 @@
 package com.github.wirbelwind03.autosinistre.controllers;
 
-import com.github.wirbelwind03.autosinistre.dto.RegisterRequestDTO;
+import com.github.wirbelwind03.autosinistre.dto.request.AuthRequestDTO;
+import com.github.wirbelwind03.autosinistre.dto.request.RegisterRequestDTO;
+import com.github.wirbelwind03.autosinistre.dto.response.AuthResponseDTO;
 import com.github.wirbelwind03.autosinistre.services.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,13 +19,12 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("register")
-    public String register(@RequestBody RegisterRequestDTO request){
-        authService.register(request);
-        return  "Success";
+    public ResponseEntity<AuthResponseDTO> register(@RequestBody RegisterRequestDTO request){
+        return  ResponseEntity.ok(authService.register(request));
     }
 
     @PostMapping("/login")
-    public String login(){
-        return  "Success";
+    public ResponseEntity<AuthResponseDTO> login(@RequestBody AuthRequestDTO request){
+        return ResponseEntity.ok(authService.login(request));
     }
 }
