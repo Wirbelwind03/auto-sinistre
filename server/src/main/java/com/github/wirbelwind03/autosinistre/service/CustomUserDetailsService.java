@@ -1,14 +1,12 @@
-package com.github.wirbelwind03.autosinistre.services;
+package com.github.wirbelwind03.autosinistre.service;
 
-import com.github.wirbelwind03.autosinistre.models.User;
-import com.github.wirbelwind03.autosinistre.repositories.UserRepository;
+import com.github.wirbelwind03.autosinistre.model.entity.User;
+import com.github.wirbelwind03.autosinistre.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

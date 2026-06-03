@@ -1,6 +1,6 @@
-package com.github.wirbelwind03.autosinistre.dto.request;
+package com.github.wirbelwind03.autosinistre.model.dto.request;
 
-import com.github.wirbelwind03.autosinistre.models.Role;
+import com.github.wirbelwind03.autosinistre.model.entity.Role;
 import lombok.Data;
 
 @Data

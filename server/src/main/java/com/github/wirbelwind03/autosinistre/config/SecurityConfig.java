@@ -1,4 +1,4 @@
-package com.github.wirbelwind03.autosinistre.configurations;
+package com.github.wirbelwind03.autosinistre.config;
 
 import com.github.wirbelwind03.autosinistre.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;

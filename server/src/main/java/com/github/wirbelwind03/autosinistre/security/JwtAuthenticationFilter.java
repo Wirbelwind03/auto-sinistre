@@ -1,6 +1,5 @@
 package com.github.wirbelwind03.autosinistre.security;
 
-import com.github.wirbelwind03.autosinistre.models.User;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,9 +1,9 @@
-package com.github.wirbelwind03.autosinistre.controllers;
+package com.github.wirbelwind03.autosinistre.controller;
 
-import com.github.wirbelwind03.autosinistre.dto.request.AuthRequestDTO;
-import com.github.wirbelwind03.autosinistre.dto.request.RegisterRequestDTO;
-import com.github.wirbelwind03.autosinistre.dto.response.AuthResponseDTO;
-import com.github.wirbelwind03.autosinistre.services.AuthService;
+import com.github.wirbelwind03.autosinistre.model.dto.request.AuthRequestDTO;
+import com.github.wirbelwind03.autosinistre.model.dto.request.RegisterRequestDTO;
+import com.github.wirbelwind03.autosinistre.model.dto.response.AuthResponseDTO;
+import com.github.wirbelwind03.autosinistre.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

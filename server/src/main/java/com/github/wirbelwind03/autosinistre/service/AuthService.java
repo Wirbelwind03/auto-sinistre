@@ -1,10 +1,10 @@
-package com.github.wirbelwind03.autosinistre.services;
+package com.github.wirbelwind03.autosinistre.service;
 
-import com.github.wirbelwind03.autosinistre.dto.request.AuthRequestDTO;
-import com.github.wirbelwind03.autosinistre.dto.response.AuthResponseDTO;
-import com.github.wirbelwind03.autosinistre.dto.request.RegisterRequestDTO;
-import com.github.wirbelwind03.autosinistre.models.User;
-import com.github.wirbelwind03.autosinistre.repositories.UserRepository;
+import com.github.wirbelwind03.autosinistre.model.dto.request.AuthRequestDTO;
+import com.github.wirbelwind03.autosinistre.model.dto.response.AuthResponseDTO;
+import com.github.wirbelwind03.autosinistre.model.dto.request.RegisterRequestDTO;
+import com.github.wirbelwind03.autosinistre.model.entity.User;
+import com.github.wirbelwind03.autosinistre.repository.UserRepository;
 import com.github.wirbelwind03.autosinistre.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;

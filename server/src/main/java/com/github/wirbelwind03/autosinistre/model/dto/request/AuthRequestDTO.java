@@ -1,4 +1,4 @@
-package com.github.wirbelwind03.autosinistre.dto.request;
+package com.github.wirbelwind03.autosinistre.model.dto.request;
 
 import lombok.Data;
 
