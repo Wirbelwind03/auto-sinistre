@@ -5,8 +5,15 @@ spring:
     password: postgres
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+  flyway:
+    enabled: true
+    locations: "classpath:db/migration"
 
 jwt:
   secret: a60402b4cd00003f347f5fa9e009f807659a19cfa4a9dc2c80a2eaedc7d67075
