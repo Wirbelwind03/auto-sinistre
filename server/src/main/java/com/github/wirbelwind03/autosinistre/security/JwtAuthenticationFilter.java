@@ -37,6 +37,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             try{
                 userEmail = jwtUtil.extractUsername(token);
             } catch (Exception e){
+                filterChain.doFilter(request, response);
                 return;
             }
 
@@ -54,9 +55,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 }
             }
-            filterChain.doFilter(request, response);
-        }
 
+        }
+        filterChain.doFilter(request, response);
     }
 
     private String parseToken(@NonNull HttpServletRequest request){
