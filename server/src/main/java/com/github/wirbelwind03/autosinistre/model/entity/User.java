@@ -1,8 +1,10 @@
 package com.github.wirbelwind03.autosinistre.model.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,8 +15,10 @@ import java.util.Set;
 
 @Data
 @Entity
-@Table(name = "USERS")
+@Table(name = "users")
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User implements UserDetails {
 
     @Id
@@ -27,16 +31,14 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    @Column(unique = true, nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false)
     private Role role;
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.getName().name()));
     }
-
 
     @Override
     public String getUsername() {
