@@ -3,7 +3,10 @@ package com.github.wirbelwind03.autosinistre.service;
 import com.github.wirbelwind03.autosinistre.model.dto.request.AuthRequestDTO;
 import com.github.wirbelwind03.autosinistre.model.dto.response.AuthResponseDTO;
 import com.github.wirbelwind03.autosinistre.model.dto.request.RegisterRequestDTO;
+import com.github.wirbelwind03.autosinistre.model.entity.Role;
 import com.github.wirbelwind03.autosinistre.model.entity.User;
+import com.github.wirbelwind03.autosinistre.model.enums.RoleEnum;
+import com.github.wirbelwind03.autosinistre.repository.RoleRepository;
 import com.github.wirbelwind03.autosinistre.repository.UserRepository;
 import com.github.wirbelwind03.autosinistre.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -12,12 +15,15 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
 
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
 
@@ -26,10 +32,16 @@ public class AuthService {
             throw new IllegalArgumentException("Un compte existe déjà avec cette email.");
         }
 
+        Optional<Role> optionalRole = roleRepository.findByName(RoleEnum.CLIENT);
+
+        if (optionalRole.isEmpty()) {
+            return null;
+        }
+
         User user = User.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(request.getRole())
+                .role(optionalRole.get())
                 .build();
 
         userRepository.save(user);
@@ -45,17 +57,17 @@ public class AuthService {
                 new UsernamePasswordAuthenticationToken(requestDTO.getEmail(), requestDTO.getPassword())
         );
 
-        User user = userRepository.findByEmail(requestDTO.getEmail());
-        if (user == null){
+        Optional<User> user = userRepository.findByEmail(requestDTO.getEmail());
+        if (user.isEmpty()){
             throw new IllegalArgumentException("Utilisateur introuvable");
         }
 
-        String token = jwtUtil.generateToken(user);
+        String token = jwtUtil.generateToken(user.get());
 
         return AuthResponseDTO.builder()
                 .token(token)
-                .email(user.getEmail())
-                .role(user.getRole())
+                .email(user.get().getEmail())
+                .role(user.get().getRole())
                 .build();
     }
 }
