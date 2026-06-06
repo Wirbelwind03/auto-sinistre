@@ -1,5 +1,7 @@
 package com.github.wirbelwind03.autosinistre.service;
 
+import com.github.wirbelwind03.autosinistre.exception.BadCredentialsException;
+import com.github.wirbelwind03.autosinistre.exception.UserNotFoundException;
 import com.github.wirbelwind03.autosinistre.model.dto.request.AuthRequestDTO;
 import com.github.wirbelwind03.autosinistre.model.dto.response.AuthResponseDTO;
 import com.github.wirbelwind03.autosinistre.model.dto.request.RegisterRequestDTO;
@@ -10,10 +12,12 @@ import com.github.wirbelwind03.autosinistre.repository.RoleRepository;
 import com.github.wirbelwind03.autosinistre.repository.UserRepository;
 import com.github.wirbelwind03.autosinistre.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
@@ -53,14 +57,20 @@ public class AuthService {
     }
 
     public AuthResponseDTO login(AuthRequestDTO requestDTO){
+        // Vérifier si un utilisateur existe avec cette email
+        Optional<User> user = userRepository.findByEmail(requestDTO.getEmail());
+        if (user.isEmpty()){
+            throw new UserNotFoundException("Aucun compte associé à cet email");
+        }
+
+        // Verifier si le mot de passe est correcte
+        if (!passwordEncoder.matches(requestDTO.getPassword(), user.get().getPassword())) {
+            throw new BadCredentialsException("Mot de passe incorrect");
+        }
+
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(requestDTO.getEmail(), requestDTO.getPassword())
         );
-
-        Optional<User> user = userRepository.findByEmail(requestDTO.getEmail());
-        if (user.isEmpty()){
-            throw new IllegalArgumentException("Utilisateur introuvable");
-        }
 
         String token = jwtUtil.generateToken(user.get());
 
