@@ -196,7 +196,9 @@ function handleLogin() {
   
   auth.login(email.value, password.value)
     .then(() => isLoggedIn.value = true)
-    .catch(() => {})
+    .catch(() => {
+      
+    })
     .finally(() => { loginLoading.value = false } )
 }
 </script>
