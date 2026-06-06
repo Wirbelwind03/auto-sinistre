@@ -6,7 +6,9 @@ import '@mdi/font/css/materialdesignicons.css'
 import App from './App.vue'
 import router from './router'
 
-const vuetify = createVuetify()
+const vuetify = createVuetify({
+  theme: { defaultTheme: 'light' }
+})
 const pinia = createPinia()
 
 createApp(App)
