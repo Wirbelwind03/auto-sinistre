@@ -1,7 +1,50 @@
+<style scoped>
+</style>
+
 <template>
-  <div class="container">
-    <p>Connecté en tant que <strong>{{ auth.userEmail }}</strong></p>
-    <button @click="handleLogout">Se déconnecter</button>
+  <div class="d-flex flex-row justify-center align-center">
+    <v-card width="400" class="pa-8 rounded-lg">
+
+      <div class="text-h6 mb-1 font-weight-black text-uppercase">Auto Assureur</div>
+
+      <!-- Connexion -->
+      <div>
+          <v-text-field
+            label="Adresse e-mail"
+            type="email"
+          ></v-text-field>
+
+          <v-text-field
+            label="Mot de passe"
+            type="password"
+          ></v-text-field>
+
+          <v-btn
+            class="text-uppercase font-weight-bold"
+            color="blue-darken-3"
+            size="large"
+            width="100%"
+            append-icon="mdi-arrow-right"
+          >
+            Se connecter
+          </v-btn>
+
+          <v-divider class="my-4">ou</v-divider>
+
+          <v-btn
+            class="text-uppercase font-weight-bold"
+            variant="outlined"
+            color="blue-darken-2"
+            size="large"
+            flat
+            width="100%"
+            prepend-icon="mdi-account-plus"
+          >
+            Créer un compte
+          </v-btn>
+      </div>
+    </v-card>
+
   </div>
 </template>
  
