@@ -2,7 +2,6 @@ package com.github.wirbelwind03.autosinistre.exception.handler;
 
 import com.github.wirbelwind03.autosinistre.exception.BadCredentialsException;
 import com.github.wirbelwind03.autosinistre.exception.UserNotFoundException;
-import com.github.wirbelwind03.autosinistre.exception.InvalidEmailException;
 import com.github.wirbelwind03.autosinistre.exception.UserAlreadyExistException;
 import com.github.wirbelwind03.autosinistre.model.dto.response.ErrorResponseDTO;
 import org.springframework.http.HttpStatus;
@@ -47,15 +46,6 @@ public class AuthExceptionHandler {
         return ErrorResponseDTO.builder()
                 .errorCode("VALIDATION_BAD_REQUEST")
                 .message(errors)
-                .build();
-    }
-
-    @ExceptionHandler(InvalidEmailException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponseDTO handleInvalidEmail(InvalidEmailException e) {
-        return ErrorResponseDTO.builder()
-                .errorCode("INVALID_EMAIL_BAD_REQUEST")
-                .message(e.getMessage())
                 .build();
     }
 

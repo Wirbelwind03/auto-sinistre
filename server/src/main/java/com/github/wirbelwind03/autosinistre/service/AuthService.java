@@ -2,7 +2,6 @@ package com.github.wirbelwind03.autosinistre.service;
 
 import com.github.wirbelwind03.autosinistre.exception.BadCredentialsException;
 import com.github.wirbelwind03.autosinistre.exception.UserNotFoundException;
-import com.github.wirbelwind03.autosinistre.exception.InvalidEmailException;
 import com.github.wirbelwind03.autosinistre.exception.UserAlreadyExistException;
 import com.github.wirbelwind03.autosinistre.model.dto.request.AuthRequestDTO;
 import com.github.wirbelwind03.autosinistre.model.dto.response.AuthResponseDTO;
@@ -13,14 +12,11 @@ import com.github.wirbelwind03.autosinistre.model.enums.RoleEnum;
 import com.github.wirbelwind03.autosinistre.repository.RoleRepository;
 import com.github.wirbelwind03.autosinistre.repository.UserRepository;
 import com.github.wirbelwind03.autosinistre.security.JwtUtil;
-import com.github.wirbelwind03.autosinistre.util.ValidationUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
@@ -37,10 +33,6 @@ public class AuthService {
     public AuthResponseDTO register(RegisterRequestDTO request){
         if (userRepository.existsByEmail(request.getEmail())){
             throw new UserAlreadyExistException();
-        }
-
-        if (!ValidationUtils.isValidEmail(request.getEmail())){
-            throw new InvalidEmailException();
         }
 
         // Mettre le role client au nouveau utilisateur
@@ -69,12 +61,12 @@ public class AuthService {
         // Vérifier si un utilisateur existe avec cette email
         Optional<User> user = userRepository.findByEmail(requestDTO.getEmail());
         if (user.isEmpty()){
-            throw new UserNotFoundException("Aucun compte associé à cet email");
+            throw new UserNotFoundException();
         }
 
         // Verifier si le mot de passe est correcte
         if (!passwordEncoder.matches(requestDTO.getPassword(), user.get().getPassword())) {
-            throw new BadCredentialsException("Mot de passe incorrect");
+            throw new BadCredentialsException();
         }
 
         authenticationManager.authenticate(
