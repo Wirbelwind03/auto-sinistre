@@ -82,11 +82,11 @@
 
                 <v-text-field
                   v-model="email"
+                  :error-messages="loginErrorsForm.email"
                   label="Adresse e-mail"
                   variant="outlined"
                   density="comfortable"
                   prepend-inner-icon="mdi-email-outline"
-                  type="email"
                   class="mb-3"
                   color="blue-darken-2"
                   rounded="lg"
@@ -94,6 +94,7 @@
 
                 <v-text-field
                   v-model="password"
+                  :error-messages="loginErrorsForm.password"
                   label="Mot de passe"
                   variant="outlined"
                   density="comfortable"
@@ -104,13 +105,13 @@
                 ></v-text-field>
 
                 <v-btn
+                  :loading="loginLoading"
                   color="blue-darken-3"
                   variant="flat"
                   block
                   rounded="lg"
                   size="large"
                   class="font-weight-bold text-uppercase"
-                  :loading="loginLoading"
                   append-icon="mdi-arrow-right"
                   @click="handleLogin"
                 >
@@ -132,6 +133,7 @@
                 </v-btn>
               </div>
 
+              <!-- Inscription -->
               <div v-else>
                 <div class="d-flex align-center ga-2 mb-5">
                   <v-btn icon="mdi-arrow-left" variant="text" size="small" @click="showRegister = false"></v-btn>
@@ -142,20 +144,73 @@
 
                 <v-row>
                   <v-col cols="6" class="pb-0">
-                    <v-text-field label="Prénom *" variant="outlined" density="comfortable" rounded="lg" color="blue-darken-2"></v-text-field>
+                    <v-text-field 
+                      v-model="registerForm.firstName" 
+                      :error-messages="registerFormErrors.firstName"
+                      @keypress="lettersOnly"
+                      label="Prénom *" variant="outlined" 
+                      density="comfortable" rounded="lg" 
+                      color="blue-darken-2"
+                    ></v-text-field>
                   </v-col>
                   <v-col cols="6" class="pb-0">
-                    <v-text-field label="Nom *" variant="outlined" density="comfortable" rounded="lg" color="blue-darken-2"></v-text-field>
+                    <v-text-field 
+                      v-model="registerForm.name" 
+                      :error-messages="registerFormErrors.name"
+                      @keypress="lettersOnly"
+                      label="Nom *" 
+                      variant="outlined" 
+                      density="comfortable" 
+                      rounded="lg" 
+                      color="blue-darken-2"
+                    ></v-text-field>
                   </v-col>
                 </v-row>
 
-                <v-text-field label="E-mail *" variant="outlined" density="comfortable" prepend-inner-icon="mdi-email-outline" class="mb-3" rounded="lg" color="blue-darken-2"></v-text-field>
+                <v-text-field 
+                  v-model="registerForm.email" 
+                  :error-messages="registerFormErrors.email"
+                  label="E-mail *" 
+                  variant="outlined" 
+                  density="comfortable" 
+                  prepend-inner-icon="mdi-email-outline" 
+                  class="mb-3" 
+                  rounded="lg" 
+                  color="blue-darken-2"
+                ></v-text-field>
                 <!-- <v-text-field label="Téléphone" variant="outlined" density="comfortable" prepend-inner-icon="mdi-phone" class="mb-3" rounded="lg" color="blue-darken-2"></v-text-field> -->
 
-                <v-text-field label="Mot de passe *" variant="outlined" density="comfortable" prepend-inner-icon="mdi-lock-outline" type="password" class="mb-3" rounded="lg" color="blue-darken-2"></v-text-field>
-                <v-text-field label="Confirmer le mot de passe *" variant="outlined" density="comfortable" prepend-inner-icon="mdi-lock-check" type="password" class="mb-4" rounded="lg" color="blue-darken-2"></v-text-field>
+                <v-text-field 
+                  v-model="registerForm.password"
+                  :error-messages="registerFormErrors.password"
+                  label="Mot de passe *" 
+                  variant="outlined" density="comfortable" 
+                  prepend-inner-icon="mdi-lock-outline" 
+                  type="password" 
+                  class="mb-3" 
+                  rounded="lg" 
+                  color="blue-darken-2"
+                ></v-text-field>
+                <v-text-field 
+                  v-model="registerForm.confirmPassword"
+                  :error-messages="registerFormErrors.confirmPassword"
+                  label="Confirmer le mot de passe *" 
+                  variant="outlined" density="comfortable" 
+                  prepend-inner-icon="mdi-lock-check" 
+                  type="password" class="mb-4" 
+                  rounded="lg" 
+                  color="blue-darken-2"
+                ></v-text-field>
               
-                <v-btn color="blue-darken-3" variant="flat" block rounded="lg" size="large" class="font-weight-bold" append-icon="mdi-account-check">
+                <v-btn 
+                  :loading="registerLoading"
+                  color="blue-darken-3" 
+                  variant="flat" block 
+                  rounded="lg" size="large" 
+                  class="font-weight-bold text-uppercase" 
+                  append-icon="mdi-account-check"
+                  @click="handleRegister"
+                >
                   Créer mon compte
                 </v-btn>
               </div>
@@ -166,11 +221,11 @@
     </v-container>
   </div>
 
-  <v-snackbar v-model="isLoggedIn" color="success" timeout="3000" location="top">
+  <v-snackbar v-model="snackbar.show" :color="snackbar.color" timeout="3000" location="top">
     <v-icon class="mr-2">mdi-check-circle</v-icon>
-    Connexion réussie ! Redirection...
+    {{ snackbar.message }}
     <template v-slot:actions>
-      <v-btn variant="text" @click="isLoggedIn = false">OK</v-btn>
+      <v-btn variant="text" @click="snackbar.show = false">OK</v-btn>
     </template>
   </v-snackbar>
 </template>
@@ -178,27 +233,120 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
+import { lettersOnly, validateEmail } from '@/utils/validation'
  
 const router = useRouter()
 const auth   = useAuthStore()
 
 const showRegister = ref(false)
 
+const snackbar = reactive({
+  show: false,
+  message: '',
+  color: 'success'
+})
+
+// Connexion
 const email    = ref('')
 const password = ref('')
 
+const loginErrorsForm = reactive({
+  email: '',
+  password: ''
+})
+
 const loginLoading  = ref(false)
-const isLoggedIn = ref(false)
 
 function handleLogin() {
+  Object.keys(loginErrorsForm).forEach(key => loginErrorsForm[key] = '')
+
   loginLoading.value = true
-  
   auth.login(email.value, password.value)
-    .then(() => isLoggedIn.value = true)
-    .catch(() => {
-      
+    .then(() => {
+        snackbar.show = true
+        snackbar.message = 'Connexion réussie ! Redirection...'
+    })
+    .catch((e) => {
+      switch (e.response?.status){
+        case 401:
+          loginErrorsForm.password = "Mauvais mot de passe"
+          break
+
+        case 404:
+          loginErrorsForm.email = "Compte non trouvé"
+          break
+
+        default:
+          break
+      }
     })
     .finally(() => { loginLoading.value = false } )
 }
+
+// Incrisption
+const registerForm = reactive({
+  email: '',
+  password: '',
+  confirmPassword: '',
+  name: '',
+  firstName: '',
+})
+
+const registerFormErrors = reactive({
+  email: '',
+  password: '',
+  confirmPassword: '',
+  name: '',
+  firstName: '',
+})
+
+const registerLoading = ref(false)
+
+function handleRegister(){
+  if (validateRegistration()) { return } 
+
+  registerLoading.value = true; 
+  auth.register(registerForm.email, registerForm.password, registerForm.name, registerForm.firstName)
+    .then(() => {
+        snackbar.show = true
+        snackbar.message = 'Inscription réussi ! Redirection...'
+    })
+    .catch((e) => {
+      if (e.response?.status === 409){
+        registerFormErrors.email = "Email déjà utilisé"
+      }
+    })
+    .finally(() => { registerLoading.value = false})
+}
+
+function validateRegistration(){
+  let hasErrors = false
+
+  Object.keys(registerFormErrors).forEach(key => registerFormErrors[key] = '')
+
+  Object.keys(registerFormErrors).forEach(key => {
+    if (!registerForm[key]) {
+      registerFormErrors[key] = 'Requis'
+      hasErrors = true
+    }
+  })
+
+  // Vérifier si la confirmation de mot de passe est bon
+  if (registerForm.password !== registerForm.confirmPassword) {
+    registerFormErrors.confirmPassword = 'Les mots de passe ne correspondent pas'
+    hasErrors = true
+  }
+
+  // Si un email à été rentrée, véfifier s'il est valide
+  if (!registerFormErrors.email) {
+      if (!validateEmail(registerForm.email)){
+        registerFormErrors.email = 'Format d\'email invalide'
+        hasErrors = true
+      }
+  }
+
+  return hasErrors
+}
+
 </script>
