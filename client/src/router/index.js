@@ -22,12 +22,12 @@ const router = createRouter({
 router.beforeEach((to) => {
     const auth = useAuthStore()
 
-    if (to.meta.requiresAuth && !auth.isAuthenticated) {
-        return { name: 'Login' }
-    }
-    if (to.meta.requiresGuest && auth.isAuthenticated) {
-        return { name: 'Home' }
-    }
+    // if (to.meta.requiresAuth && !auth.isAuthenticated) {
+    //     return { name: 'Login' }
+    // }
+    // if (to.meta.requiresGuest && auth.isAuthenticated) {
+    //     return { name: 'Home' }
+    // }
 
 })
 
