@@ -9,5 +9,16 @@ CREATE TABLE users (
    email VARCHAR(255) NOT NULL UNIQUE,
    password VARCHAR(255) NOT NULL,
    role_id BIGINT NOT NULL,
+   name VARCHAR(255) NOT NULL,
+   first_name VARCHAR(255) NOT NULL,
    FOREIGN KEY (role_id) REFERENCES roles(id)
+);
+
+CREATE TABLE sinistres (
+    id BIGSERIAL PRIMARY KEY ,
+    client_id BIGINT NOT NULL REFERENCES users(id),
+    type VARCHAR(50) NOT NULL,
+    status VARCHAR(50) NOT NULL,
+    location VARCHAR(255) NOT NULL,
+    declaration_date TIMESTAMP NOT NULL
 );
