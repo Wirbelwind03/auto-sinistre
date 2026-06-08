@@ -7,7 +7,7 @@ import App from './App.vue'
 import router from './router'
 
 const vuetify = createVuetify({
-  theme: { defaultTheme: 'light' }
+  theme: { defaultTheme: 'dark' }
 })
 const pinia = createPinia()
 
