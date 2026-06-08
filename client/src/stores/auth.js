@@ -1,11 +1,19 @@
 import { defineStore } from "pinia"
-import { ref, computed } from 'vue'
+import { ref, computed, reactive } from 'vue'
 import api from '@/services/api'
 
 export const useAuthStore = defineStore('auth', () => {
     const token = ref(localStorage.getItem('token') || null)
     const userEmail  = ref(localStorage.getItem('email') || null)
     const role  = ref(localStorage.getItem('role') || null)
+
+    const user = reactive(JSON.parse(localStorage.getItem('user')) || {
+        role: null,
+        email: null,
+        firstName: null,
+        name: null
+    })
+
     
     const isAuthenticated = computed(() => !!token.value)
 
@@ -21,24 +29,26 @@ export const useAuthStore = defineStore('auth', () => {
 
     function logout(){
         token.value = null
-        userEmail.value  = null
-        // role.value  = null
+
+        user.email = null
+        user.firstName = null
+        user.name = null
+        user.role = null
 
         localStorage.removeItem('token')
-        localStorage.removeItem('email')
-        // localStorage.removeItem('role')
+        localStorage.removeItem('user')
     }
 
     function getAuthResponse(authResponse){
-        token.value = authResponse.token
-        userEmail.value = authResponse.email
-        // role.value = authResponse.role
-        
+        const { token: tok, ...userData } = authResponse
+
+        token.value = tok
+        Object.assign(user, userData)
+
         localStorage.setItem('token', authResponse.token)
-        localStorage.setItem('email', authResponse.email)
-        // localStorage.setItem('role', authResponse.role)
+        localStorage.setItem('user', JSON.stringify(user))
     }
 
 
-    return { token, userEmail, isAuthenticated, login, register, logout }
+    return { token, user, isAuthenticated, login, register, logout }
 })
