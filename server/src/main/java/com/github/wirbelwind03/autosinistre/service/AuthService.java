@@ -51,8 +51,13 @@ public class AuthService {
 
         userRepository.save(user);
 
+        String token = jwtUtil.generateToken(user);
+
         return AuthResponseDTO.builder()
+                .token(token)
                 .email(user.getEmail())
+                .name(user.getName())
+                .firstName(user.getFirstName())
                 .role(user.getRole())
                 .build();
     }
@@ -78,6 +83,8 @@ public class AuthService {
         return AuthResponseDTO.builder()
                 .token(token)
                 .email(user.get().getEmail())
+                .name(user.get().getName())
+                .firstName(user.get().getFirstName())
                 .role(user.get().getRole())
                 .build();
     }

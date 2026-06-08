@@ -9,5 +9,7 @@ import lombok.Data;
 public class AuthResponseDTO {
     private String token;
     private String email;
+    private String firstName;
+    private String name;
     private Role role;
 }
