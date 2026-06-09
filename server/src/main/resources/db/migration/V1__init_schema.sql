@@ -38,6 +38,8 @@ CREATE TABLE vehicles (
    year INTEGER NOT NULL,
    mileage BIGINT NOT NULL,
    license_plate VARCHAR(10) NOT NULL UNIQUE,
+   fuelType VARCHAR(64) NOT NULL,
+   vin INTEGER NOT NULL
 
    CONSTRAINT fk_vehicle_brand FOREIGN KEY (brand_id) REFERENCES brands(id),
    CONSTRAINT fk_vehicle_user FOREIGN KEY (owner_id) REFERENCES users(id)

@@ -166,7 +166,8 @@ function addVehicle(){
     addVehicleForm.model,
     addVehicleForm.year,
     addVehicleForm.mileage,
-    addVehicleForm.licensePlate
+    addVehicleForm.licensePlate,
+    addVehicleForm.vin
   )
 }
 

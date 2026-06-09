@@ -17,8 +17,22 @@
         
         <!-- Grillage de véhicules -->
         <v-row>
+            <v-col 
+                v-for="(vehicle, i) in vehicleStore.vehicles"
+                :key="vehicle.id"
+                :style="`animation-delay:${i * .08}s`"
+                cols="12" sm="6" md="4"
+            >
+                <Card 
+                    :vehicle="vehicle"
+                />
+            </v-col>
+
+
             <!-- Carte ajouter un véhicule -->
-            <AddCard @open-add-dialog="addDialog = true"/>
+             <v-col cols="12" sm="6" md="4">
+                <AddCard @open-add-dialog="addDialog = true"/>
+             </v-col>
         </v-row>
         
         <AddDialog v-model="addDialog"/>
@@ -28,16 +42,28 @@
 
 <script setup>
 import { useAuthStore } from '@/stores/auth'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
+import Card from '@/components/vehicle/Card.vue'
 import AddCard from '@/components/vehicle/AddCard.vue'
 import AddDialog from '@/components/vehicle/AddDialog.vue'
 import Toolbar from '@/components/vehicle/Toolbar.vue'
-
+import { useVehicleStore } from '@/stores/vehicleStore'
 
 const auth = useAuthStore()
+const vehicleStore = useVehicleStore()
 
 const role = ref(auth.user?.role?.name || 'CLIENT')
 
 const addDialog = ref(false)
+
+onMounted(async() => {
+    await vehicleStore.getUserVehicles()
+    .then((response) => {
+      console.log('Marques de véhicules :', vehicleStore.vehicles)
+    })
+    .catch((e) => {
+      console.error('Erreur lors du chargement des voitures :', e)
+    })
+})
 </script>

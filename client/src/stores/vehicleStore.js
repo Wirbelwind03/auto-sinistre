@@ -5,13 +5,14 @@ import api from '@/services/api'
 export const useVehicleStore = defineStore('vehicle', () => {
     const vehicles = ref([])
 
-    async function addVehicle(brandId, model, year, mileage, licensePlate) {
+    async function addVehicle(brandId, model, year, mileage, licensePlate, vin) {
     const response = await api.post('/vehicle/add', {
         brandId: brandId,
         model: model,
         year: year,
         mileage: mileage,
-        licensePlate: licensePlate
+        licensePlate: licensePlate,
+        vin: vin
     })
     }
 

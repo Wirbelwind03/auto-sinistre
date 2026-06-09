@@ -1,5 +1,6 @@
 package com.github.wirbelwind03.autosinistre.model.entity;
 
+import com.github.wirbelwind03.autosinistre.model.enums.FuelTypeEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,4 +38,11 @@ public class Vehicle {
 
     @Column(nullable = false, unique = true, length = 10)
     private String licensePlate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private FuelTypeEnum fuelType;
+
+    @Column(nullable = false)
+    private Integer vin;
 }
