@@ -1,6 +1,6 @@
 ## Description
 
-AutoSinitre est une application web full-stack permettant de gérér les sinistres liées au véhicules d'un client.
+Auto Sinistre est une application web full-stack permettant de gérér les sinistres liées au véhicules d'un client.
 
 ## Tech Stack
 - Frontend: Vue, CSS
