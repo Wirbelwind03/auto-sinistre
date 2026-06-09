@@ -3,8 +3,9 @@ import { ref, computed, reactive } from 'vue'
 import api from '@/services/api'
 
 export const useVehicleStore = defineStore('vehicle', () => {
+    const vehicles = ref([])
+
     async function addVehicle(brandId, model, year, mileage, licensePlate) {
-        console.log('brandId reçu :', brandId)
     const response = await api.post('/vehicle/add', {
         brandId: brandId,
         model: model,
@@ -14,5 +15,10 @@ export const useVehicleStore = defineStore('vehicle', () => {
     })
     }
 
-    return { addVehicle }
+    async function getUserVehicles() {
+        const response = await api.get('/vehicle/my-vehicles')
+        vehicles.value = response.data
+    }
+
+    return { vehicles, addVehicle, getUserVehicles }
 })
