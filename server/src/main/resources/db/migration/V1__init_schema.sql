@@ -11,7 +11,8 @@ CREATE TABLE users (
    role_id BIGINT NOT NULL,
    name VARCHAR(255) NOT NULL,
    first_name VARCHAR(255) NOT NULL,
-   FOREIGN KEY (role_id) REFERENCES roles(id)
+
+   CONSTRAINT fk_user_role FOREIGN KEY (role_id) REFERENCES roles(id)
 );
 
 CREATE TABLE sinistres (
@@ -21,4 +22,23 @@ CREATE TABLE sinistres (
     status VARCHAR(50) NOT NULL,
     location VARCHAR(255) NOT NULL,
     declaration_date TIMESTAMP NOT NULL
+);
+
+CREATE TABLE brands (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE
+);
+
+CREATE TABLE vehicles (
+   id BIGSERIAL PRIMARY KEY,
+   brand_id BIGINT NOT NULL,
+   owner_id BIGINT NOT NULL,
+   model VARCHAR(255) NOT NULL,
+   year INTEGER NOT NULL,
+   mileage BIGINT NOT NULL,
+   license_plate VARCHAR(10) NOT NULL UNIQUE,
+
+   CONSTRAINT fk_vehicle_brand FOREIGN KEY (brand_id) REFERENCES brands(id),
+   CONSTRAINT fk_vehicle_user FOREIGN KEY (owner_id) REFERENCES users(id)
 );
