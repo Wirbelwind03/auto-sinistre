@@ -9,5 +9,5 @@ import java.util.Optional;
 public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
     List<Vehicle> findByBrand(String brand);
     List<Vehicle> findByYear(int year);
-    
+    List<Vehicle> findByOwnerId(Long id);
 }

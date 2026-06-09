@@ -13,46 +13,16 @@
     <v-container fluid class="pa-6">
         
         <!-- Barre d'outils -->
-        <Toolbar>
-            <v-card rounded="xl" elevation="1" class="mb-4">
-                <v-card-text class="pa-4">
-                <v-row align="center">
-                    <v-col cols="4">
-                    <v-text-field placeholder="Rechercher plaque, marque, propriétaire…" variant="outlined" density="compact" prepend-inner-icon="mdi-magnify" hide-details rounded="lg" color="blue-darken-2" clearable></v-text-field>
-                    </v-col>
-                    <v-col cols="2">
-                    <v-select label="Statut" :items="['Tous','Actif','Suspendu','Résilié']" variant="outlined" density="compact" hide-details rounded="lg" color="blue-darken-2"></v-select>
-                    </v-col>
-                    <v-col cols="2">
-                    <v-select label="Formule" :items="['Toutes','Tous risques','Tiers étendu','Tiers simple']" variant="outlined" density="compact" hide-details rounded="lg" color="blue-darken-2"></v-select>
-                    </v-col>
-                    <v-spacer></v-spacer>
-                    <v-col cols="auto">
-                    <v-btn-toggle mandatory density="compact" color="blue-darken-2" rounded="lg" divided>
-                        <v-btn value="table" icon="mdi-table" size="small"></v-btn>
-                        <v-btn value="grid" icon="mdi-view-grid" size="small"></v-btn>
-                    </v-btn-toggle>
-                    </v-col>
-                </v-row>
-                </v-card-text>
-            </v-card>
-        </Toolbar>
+        <Toolbar/>
         
         <!-- Grillage de véhicules -->
         <v-row>
             <!-- Carte ajouter un véhicule -->
-            <AddCard>
-                <v-card class="add-card d-flex align-center justify-center" rounded="xl" elevation="0" @click="addDialog = true">
-                    <v-card-text class="text-center pa-8">
-                    <v-avatar color="blue-lighten-4" size="56" class="mb-3">
-                        <v-icon color="blue-darken-2" size="28">mdi-plus</v-icon>
-                    </v-avatar>
-                    <div class="text-body-1 font-weight-bold text-blue-darken-2 mb-1">Ajouter un véhicule</div>
-                    <div class="text-caption text-medium-emphasis">Enregistrez un nouveau véhicule assuré</div>
-                    </v-card-text>
-                </v-card>
-            </AddCard>
+            <AddCard @open-add-dialog="addDialog = true"/>
         </v-row>
+        
+        <AddDialog v-model="addDialog"/>
+
     </v-container>
 </template>
 

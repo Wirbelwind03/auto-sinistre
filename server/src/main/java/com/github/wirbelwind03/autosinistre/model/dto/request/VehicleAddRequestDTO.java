@@ -1,20 +1,25 @@
 package com.github.wirbelwind03.autosinistre.model.dto.request;
 
+import com.github.wirbelwind03.autosinistre.model.entity.Brand;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
 public class VehicleAddRequestDTO {
-    @NotBlank(message = "La marque est obligatoire")
-    private String brand;
+    @NotNull(message = "La marque est obligatoire")
+    private Long brandId;
 
     @NotBlank(message = "Le modèle est obligatoire")
     private String model;
 
-    @NotBlank(message = "L'année est obligatoire")
-    private int year;
+    @NotNull(message = "L'année est obligatoire")
+    private Integer year;
 
-    @NotBlank(message = "Le kilométrage est obligatoire")
-    private long mileage;
+    @NotNull(message = "Le kilométrage est obligatoire")
+    private Long mileage;
+
+    @NotBlank(message = "La plaque d'immatriculation est obligatoire")
+    private String licensePlate;
 }
