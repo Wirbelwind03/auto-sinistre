@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5432/autosinistre
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+
+jwt:
+  secret: ${JWT_SECRET}
