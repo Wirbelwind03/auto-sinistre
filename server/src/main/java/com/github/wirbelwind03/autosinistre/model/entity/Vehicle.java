@@ -44,5 +44,5 @@ public class Vehicle {
     private FuelTypeEnum fuelType;
 
     @Column(nullable = false)
-    private Integer vin;
+    private String vin;
 }

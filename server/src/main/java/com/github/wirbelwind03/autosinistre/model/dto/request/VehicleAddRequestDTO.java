@@ -1,6 +1,7 @@
 package com.github.wirbelwind03.autosinistre.model.dto.request;
 
 import com.github.wirbelwind03.autosinistre.model.entity.Brand;
+import com.github.wirbelwind03.autosinistre.model.enums.FuelTypeEnum;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -22,4 +23,10 @@ public class VehicleAddRequestDTO {
 
     @NotBlank(message = "La plaque d'immatriculation est obligatoire")
     private String licensePlate;
+
+    @NotNull(message = "Le type de carburant est obligatoire")
+    private FuelTypeEnum fuelType;
+
+    @NotBlank(message = "Le N° VIN est obligatoire")
+    private String vin;
 }
