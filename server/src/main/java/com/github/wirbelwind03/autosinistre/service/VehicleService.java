@@ -1,5 +1,7 @@
 package com.github.wirbelwind03.autosinistre.service;
 
+import com.github.wirbelwind03.autosinistre.exception.AlreadyExistException;
+import com.github.wirbelwind03.autosinistre.exception.NotFoundException;
 import com.github.wirbelwind03.autosinistre.model.dto.request.VehicleAddRequestDTO;
 import com.github.wirbelwind03.autosinistre.model.entity.Brand;
 import com.github.wirbelwind03.autosinistre.model.entity.Sinistre;
@@ -21,8 +23,12 @@ public class VehicleService {
     private final VehicleRepository vehicleRepository;
 
     public void addVehicle(VehicleAddRequestDTO request, User owner){
+        if (vehicleRepository.existsByLicensePlate(request.getLicensePlate())){
+            throw new AlreadyExistException("Cette plaque d'immatriculation est déjà pris");
+        }
+
         Brand brand = brandRepository.findById(request.getBrandId())
-                .orElseThrow(() -> new RuntimeException("Marque introuvable"));
+                .orElseThrow(() -> new NotFoundException("Marque introuvable"));
 
         Vehicle vehicle = Vehicle.builder()
                 .brand(brand)
