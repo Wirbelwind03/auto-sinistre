@@ -31,6 +31,8 @@ public class VehicleService {
                 .year(request.getYear())
                 .mileage(request.getMileage())
                 .licensePlate(request.getLicensePlate())
+                .fuelType(request.getFuelType())
+                .vin(request.getVin())
                 .build();
 
         vehicleRepository.save(vehicle);
