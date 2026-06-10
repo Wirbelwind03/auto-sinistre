@@ -1,0 +1,13 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "AutoSinistre",
+      "Group": "Servers",
+      "Host": "postgres",
+      "Port": 5432,
+      "MaintenanceDB": "autosinistre",
+      "Username": "postgres",
+      "SSLMode": "prefer"
+    }
+  }
+}

@@ -6,3 +6,6 @@ spring:
 
 jwt:
   secret: ${JWT_SECRET}
+
+cors:
+  allowed-origins: http://localhost:8081
