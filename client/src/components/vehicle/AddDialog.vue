@@ -75,9 +75,11 @@
           </v-col>
           <v-col cols="4">
             <v-select 
-              v-model="addVehicleForm.fuel" 
+              v-model="addVehicleForm.fuelType" 
               label="Carburant *" 
-              :items="['Essence', 'Diesel', 'Électrique', 'Hybride', 'GPL']" 
+              :items="vehicleStore.fuelTypes"
+              item-title="label"
+              item-value="value"
               variant="outlined" 
               density="comfortable" 
               rounded="lg" 
@@ -156,7 +158,8 @@ const addVehicleForm = reactive({
   year: null,
   fuel: '',
   color: '',
-  vin: '',
+  fuelType: '',
+  vin: null,
   mileage: null
 })
 
@@ -167,14 +170,30 @@ function addVehicle(){
     addVehicleForm.year,
     addVehicleForm.mileage,
     addVehicleForm.licensePlate,
+    addVehicleForm.fuelType,
     addVehicleForm.vin
   )
 }
 
 const selectedBrand = ref('')
 const loadingBrands = ref(false)
+const loadingFuelTypes = ref(false)
 onMounted(async() => {
   loadingBrands.value = true
+  loadingFuelTypes.value = true
+
+  try {
+    await Promise.all([
+      brandStore.getAllBrands(),
+      vehicleStore.getFuelTypes()
+    ])
+  } catch (e) {
+    console.error('Erreur lors du chargement :', e)
+  } finally {
+    loadingBrands.value = false
+    loadingFuelTypes.value = false
+  }
+
   await brandStore.getAllBrands()
     .then((response) => {
       console.log('Marques de véhicules :', brandStore.brands)
