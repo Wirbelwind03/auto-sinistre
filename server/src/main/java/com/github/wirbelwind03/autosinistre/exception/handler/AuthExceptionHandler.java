@@ -34,21 +34,6 @@ public class AuthExceptionHandler {
                 .build();
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponseDTO handleValidationErrors(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new LinkedHashMap<>();
-
-        ex.getBindingResult().getFieldErrors().forEach(error ->
-                errors.put(error.getField(), error.getDefaultMessage())
-        );
-
-        return ErrorResponseDTO.builder()
-                .errorCode("VALIDATION_BAD_REQUEST")
-                .message(errors)
-                .build();
-    }
-
     @ExceptionHandler(UserAlreadyExistException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponseDTO handleUserAlreadyExistException(UserAlreadyExistException e) {

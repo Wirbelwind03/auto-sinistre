@@ -3,8 +3,6 @@
         permanent
     >
         <v-list-item
-            prepend-icon="mdi-car-emergency"
-            title="Auto Sinistres"
             nav
             class="py-4"
         >
@@ -13,6 +11,9 @@
                 <v-icon color="black" size="20">mdi-car-emergency</v-icon>
             </v-avatar>
             </template>
+            <v-list-item-title class="font-weight-black text-white" style="font-size:1.1rem">
+                Auto<span style="color:#fdd835">Sinistre</span>
+            </v-list-item-title>
         </v-list-item>
 
         <v-divider></v-divider>
@@ -26,7 +27,7 @@
                 value="dashboard" 
                 rounded="lg">
             </v-list-item>
-            <v-list-item prepend-icon="mdi-car-multiple" title="Véhicules" value="vehicules" rounded="lg"></v-list-item>
+            <v-list-item to="/vehicle" prepend-icon="mdi-car-multiple" title="Véhicules" value="vehicules" rounded="lg"></v-list-item>
             <v-list-item v-if="role === 'Admin'" prepend-icon="mdi-account-group" title="Assurés" value="assures" rounded="lg"></v-list-item>
             
 
