@@ -1,8 +1,8 @@
 package com.github.wirbelwind03.autosinistre.service;
 
+import com.github.wirbelwind03.autosinistre.exception.AlreadyExistException;
 import com.github.wirbelwind03.autosinistre.exception.BadCredentialsException;
-import com.github.wirbelwind03.autosinistre.exception.UserNotFoundException;
-import com.github.wirbelwind03.autosinistre.exception.UserAlreadyExistException;
+import com.github.wirbelwind03.autosinistre.exception.NotFoundException;
 import com.github.wirbelwind03.autosinistre.model.dto.request.AuthRequestDTO;
 import com.github.wirbelwind03.autosinistre.model.dto.response.AuthResponseDTO;
 import com.github.wirbelwind03.autosinistre.model.dto.request.RegisterRequestDTO;
@@ -32,19 +32,17 @@ public class AuthService {
 
     public AuthResponseDTO register(RegisterRequestDTO request){
         if (userRepository.existsByEmail(request.getEmail())){
-            throw new UserAlreadyExistException();
+            throw new AlreadyExistException("Un compte existe déjà avec cette email.");
         }
 
-        // Mettre le role client au nouveau utilisateur
-        Optional<Role> role = roleRepository.findByName(RoleEnum.CLIENT);
-        if (role.isEmpty()) {
-            return null;
-        }
+        // Mettre le role CLIENT au nouveau utilisateur
+        Role role = roleRepository.findByName(RoleEnum.CLIENT)
+                .orElseThrow(() -> new NotFoundException("Le role CLIENT n'a pas été trouvé dans la base de données"));
 
         User user = User.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(role.get())
+                .role(role)
                 .name(request.getName())
                 .firstName(request.getFirstName())
                 .build();
@@ -66,7 +64,7 @@ public class AuthService {
         // Vérifier si un utilisateur existe avec cette email
         Optional<User> user = userRepository.findByEmail(requestDTO.getEmail());
         if (user.isEmpty()){
-            throw new UserNotFoundException();
+            throw new NotFoundException("Aucun compte associé à cet email");
         }
 
         // Verifier si le mot de passe est correcte
