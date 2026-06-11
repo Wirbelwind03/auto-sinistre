@@ -31,6 +31,30 @@
 
   .vehicle-found-card { border-left: 4px solid #43a047 !important; }
   .kpi-chip { font-weight: 700 !important; font-size: .95rem !important; }
+
+.section-enter {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+
+.section-enter-active,
+.section-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fade-up-enter-active {
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+.fade-up-enter-from {
+  opacity: 0;
+  transform: translateY(28px);
+}
+.fade-up-enter-to {
+  opacity: 1;
+  transform: translateY(0);
+}
 </style>
 
 <template>
@@ -43,101 +67,19 @@
           <v-col cols="12" md="8">
 
             <!-- SECTION 1: VÉHICULE -->
-            <v-card rounded="xl" class="mb-5" elevation="1">
-              <v-card-title class="d-flex align-center ga-3 pa-5 pb-3">
-                <v-avatar color="blue-darken-1" rounded="lg" size="36">
-                  <v-icon size="20">mdi-car</v-icon>
-                </v-avatar>
-                <div>
-                  <div class="text-subtitle-1 font-weight-bold">Véhicule concerné</div>
-                  <div class="text-caption text-medium-emphasis">Plaque ou sélection dans vos contrats</div>
-                </div>
-              </v-card-title>
-              <v-divider></v-divider>
-              <v-card-text class="pa-5">
-                <v-row>
-                  <v-col cols="6">
-                    <v-text-field
-                      v-model="plate"
-                      label="Plaque d'immatriculation *"
-                      variant="outlined"
-                      density="comfortable"
-                      prepend-inner-icon="mdi-card-account-details"
-                      placeholder="AB-421-CD"
-                      :style="{fontFamily: 'Nunito', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase'}"
-                      hint="Recherche automatique dans la base assurés"
-                      persistent-hint
-                      color="blue-darken-2"
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
+            <Transition name="fade-up">
+              <vehicle v-if="stepperBarStore.currentStep >= 1" id="section-1"/>
+            </Transition>
 
-                <!-- Vehicle found -->
-                <v-card rounded="lg" color="green-lighten-5" class="vehicle-found-card mt-1" elevation="0">
-                  <v-card-text class="d-flex align-center ga-3 pa-4">
-                    <v-avatar color="green-lighten-3" rounded="lg" size="44">
-                      <v-icon color="green-darken-2" size="24">mdi-car-hatchback</v-icon>
-                    </v-avatar>
-                    <div class="flex-grow-1">
-                      <div class="font-weight-bold text-body-2">Peugeot 308 SW · Gris Platinium</div>
-                      <div class="text-caption text-medium-emphasis">2021 · Diesel · Jean-Pierre Moulin · Contrat actif depuis jan. 2022</div>
-                    </div>
-                    <v-chip color="success" size="small" prepend-icon="mdi-check-circle" variant="flat">Véhicule trouvé</v-chip>
-                  </v-card-text>
-                </v-card>
-              </v-card-text>
-            </v-card>
 
             <!-- SECTION 2: TYPE -->
-            <v-card rounded="xl" class="mb-5" elevation="1">
-              <v-card-title class="d-flex align-center ga-3 pa-5 pb-3">
-                <v-avatar color="orange-darken-1" rounded="lg" size="36">
-                  <v-icon size="20">mdi-lightning-bolt</v-icon>
-                </v-avatar>
-                <div>
-                  <div class="text-subtitle-1 font-weight-bold">Type de sinistre</div>
-                  <div class="text-caption text-medium-emphasis">Nature de l'incident</div>
-                </div>
-              </v-card-title>
-              <v-divider></v-divider>
-              <v-card-text class="pa-5">
-                <v-row>
-                  <v-col v-for="type in sinisterTypes" :key="type.value" cols="4">
-                    <v-card
-                      rounded="lg"
-                      :class="['type-card', selectedType === type.value ? 'selected' : '']"
-                      elevation="0"
-                      border
-                      @click="selectedType = type.value"
-                    >
-                      <v-card-text class="text-center pa-4">
-                        <v-icon :color="type.color" size="32" class="mb-2">{{ type.icon }}</v-icon>
-                        <div class="text-body-2 font-weight-bold">{{ type.name }}</div>
-                        <div class="text-caption text-medium-emphasis">{{ type.desc }}</div>
-                      </v-card-text>
-                    </v-card>
-                  </v-col>
-                </v-row>
+            <Transition name="fade-up">
+              <sinistre-form v-if="stepperBarStore.currentStep >= 2" id="section-2"/>
+            </Transition>
 
-                <div class="mt-5">
-                  <div class="text-caption font-weight-bold text-medium-emphasis text-uppercase mb-3">Sévérité estimée *</div>
-                  <v-btn-toggle v-model="severity" mandatory rounded="lg" color="white" divided>
-                    <v-btn value="low" color="success" variant="outlined" class="font-weight-bold">
-                      <v-icon start>mdi-circle-small</v-icon> Faible
-                    </v-btn>
-                    <v-btn value="med" color="warning" variant="flat" class="font-weight-bold">
-                      <v-icon start>mdi-circle-medium</v-icon> Moyenne
-                    </v-btn>
-                    <v-btn value="high" color="error" variant="outlined" class="font-weight-bold">
-                      <v-icon start>mdi-circle</v-icon> Élevée
-                    </v-btn>
-                  </v-btn-toggle>
-                </div>
-              </v-card-text>
-            </v-card>
 
             <!-- SECTION 3: DATE & LIEU -->
-            <v-card rounded="xl" class="mb-5" elevation="1">
+            <v-card v-if="stepperBarStore.currentStep >= 3" id="section-3" rounded="xl" class="mb-5" elevation="1">
               <v-card-title class="d-flex align-center ga-3 pa-5 pb-3">
                 <v-avatar color="purple-darken-1" rounded="lg" size="36">
                   <v-icon size="20">mdi-map-marker</v-icon>
@@ -200,7 +142,6 @@
                       density="comfortable"
                       prepend-inner-icon="mdi-weather-partly-cloudy"
                       :items="['☀️ Dégagé', '🌧️ Pluie', '🌨️ Neige / verglas', '🌫️ Brouillard']"
-                      model-value="☀️ Dégagé"
                       color="blue-darken-2"
                     ></v-select>
                   </v-col>
@@ -211,7 +152,6 @@
                       density="comfortable"
                       prepend-inner-icon="mdi-account-alert"
                       :items="['Oui — coordonnées connues', 'Non', 'Délit de fuite']"
-                      model-value="Oui — coordonnées connues"
                       color="blue-darken-2"
                     ></v-select>
                   </v-col>
@@ -220,7 +160,7 @@
             </v-card>
 
             <!-- SECTION 4: DOMMAGES & UPLOAD -->
-            <v-card rounded="xl" class="mb-5" elevation="1">
+            <v-card v-if="stepperBarStore.currentStep >= 4" id="section-4" rounded="xl" class="mb-5" elevation="1">
               <v-card-title class="d-flex align-center ga-3 pa-5 pb-3">
                 <v-avatar color="red-darken-1" rounded="lg" size="36">
                   <v-icon size="20">mdi-wrench</v-icon>
@@ -350,30 +290,28 @@
 </template>
 
 <script setup>
-import { useAuthStore } from '@/stores/auth'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed, watch, nextTick } from 'vue'
 
 import { useAppBarStore } from '@/stores/appBarStore.js'
+import { useStepperBarStore } from '@/stores/stepperBarStore'
+
 import StepperBar from '@/components/StepperBar.vue'
+import Vehicle from '@/components/sinistre/Vehicle.vue'
+import SinistreForm from '@/components/sinistre/SinistreForm.vue'
 
 const appBarStore = useAppBarStore()
+const stepperBarStore = useStepperBarStore()
 
 const steps = ['Véhicule', 'Sinistre', 'Circonstances', 'Documents', 'Récap']
 
-const sinisterTypes = [
-    { value: 'accident', name: 'Accident', desc: 'Collision, choc', icon: 'mdi-car-crash', color: 'red-darken-1' },
-    { value: 'vol', name: 'Vol', desc: 'Total ou partiel', icon: 'mdi-key-variant', color: 'orange-darken-2' },
-    { value: 'bris', name: 'Bris de glace', desc: 'Pare-brise, vitres', icon: 'mdi-car-windshield', color: 'blue-darken-1' },
-    { value: 'incendie', name: 'Incendie', desc: 'Feu, explosion', icon: 'mdi-fire', color: 'deep-orange-darken-2' },
-    { value: 'catnat', name: 'Catastrophe nat.', desc: 'Inondation, grêle', icon: 'mdi-weather-hurricane', color: 'teal-darken-1' },
-    { value: 'autre', name: 'Autre', desc: 'Vandalisme, etc.', icon: 'mdi-dots-horizontal-circle', color: 'grey-darken-1' },
-]
-
-const selectedType = ref('')
-const severity = ref('')
-const currentStep = ref(0)
-
 onMounted(async() => {
     appBarStore.setBar('Déclarer un sinistre')
+})
+
+watch(() => stepperBarStore.currentStep, (step) => {
+  nextTick(() => {
+    document.getElementById(`section-${step}`)
+      ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  })
 })
 </script>
