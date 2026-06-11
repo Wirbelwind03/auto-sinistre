@@ -35,34 +35,7 @@
 
 <template>
      <!-- STEPPER BAR -->
-      <v-sheet color="blue-darken-2" class="px-6 py-3">
-        <div class="d-flex align-center ga-2">
-          <template v-for="(step, i) in steps" :key="i">
-            <div class="d-flex align-center ga-2">
-              <v-avatar
-                size="28"
-                :class="i < currentStep ? 'step-done' : i === currentStep ? 'step-active' : 'step-idle'"
-              >
-                <v-icon v-if="i < currentStep" size="16">mdi-check</v-icon>
-                <span v-else style="font-size:.8rem;font-weight:700">{{ i + 1 }}</span>
-              </v-avatar>
-              <span :class="i === currentStep ? 'text-white font-weight-bold' : 'text-blue-lighten-3'" style="font-size:.82rem">
-                {{ step }}
-              </span>
-            </div>
-            <v-icon v-if="i < steps.length - 1" color="blue-lighten-3" size="16">mdi-chevron-right</v-icon>
-          </template>
-
-          <v-spacer></v-spacer>
-
-          <v-btn size="small" variant="outlined" color="white" class="mr-2" :disabled="currentStep === 0" @click="currentStep--">
-            Précédent
-          </v-btn>
-          <v-btn size="small" color="yellow-accent-3" variant="flat" class="text-black font-weight-bold" :disabled="currentStep === steps.length - 1" @click="currentStep++">
-            Suivant
-          </v-btn>
-        </div>
-      </v-sheet>
+      <stepper-bar :steps="steps"></stepper-bar>
 
       <v-container fluid class="pa-6">
         <v-row>
@@ -381,6 +354,7 @@ import { useAuthStore } from '@/stores/auth'
 import { onMounted, ref } from 'vue'
 
 import { useAppBarStore } from '@/stores/appBarStore.js'
+import StepperBar from '@/components/StepperBar.vue'
 
 const appBarStore = useAppBarStore()
 
@@ -395,8 +369,8 @@ const sinisterTypes = [
     { value: 'autre', name: 'Autre', desc: 'Vandalisme, etc.', icon: 'mdi-dots-horizontal-circle', color: 'grey-darken-1' },
 ]
 
-const selectedType = ref('accident')
-const severity = ref('med')
+const selectedType = ref('')
+const severity = ref('')
 const currentStep = ref(0)
 
 onMounted(async() => {
