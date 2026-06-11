@@ -15,15 +15,6 @@ CREATE TABLE users (
    CONSTRAINT fk_user_role FOREIGN KEY (role_id) REFERENCES roles(id)
 );
 
-CREATE TABLE sinistres (
-    id BIGSERIAL PRIMARY KEY ,
-    client_id BIGINT NOT NULL REFERENCES users(id),
-    type VARCHAR(50) NOT NULL,
-    status VARCHAR(50) NOT NULL,
-    location VARCHAR(255) NOT NULL,
-    declaration_date TIMESTAMP NOT NULL
-);
-
 CREATE TABLE brands (
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
@@ -31,16 +22,27 @@ CREATE TABLE brands (
 );
 
 CREATE TABLE vehicles (
-   id BIGSERIAL PRIMARY KEY,
-   brand_id BIGINT NOT NULL,
-   owner_id BIGINT NOT NULL,
-   model VARCHAR(255) NOT NULL,
-   year INTEGER NOT NULL,
-   mileage BIGINT NOT NULL,
-   license_plate VARCHAR(9) NOT NULL UNIQUE,
-   fuel_type VARCHAR(64) NOT NULL,
-   vin VARCHAR(17) NOT NULL,
+    id BIGSERIAL PRIMARY KEY,
+    brand_id BIGINT NOT NULL,
+    owner_id BIGINT NOT NULL,
+    model VARCHAR(255) NOT NULL,
+    year INTEGER NOT NULL,
+    mileage BIGINT NOT NULL,
+    license_plate VARCHAR(9) NOT NULL UNIQUE,
+    fuel_type VARCHAR(64) NOT NULL,
+    vin VARCHAR(17) NOT NULL,
 
-   CONSTRAINT fk_vehicle_brand FOREIGN KEY (brand_id) REFERENCES brands(id),
-   CONSTRAINT fk_vehicle_user FOREIGN KEY (owner_id) REFERENCES users(id)
+    CONSTRAINT fk_vehicle_brand FOREIGN KEY (brand_id) REFERENCES brands(id),
+    CONSTRAINT fk_vehicle_user FOREIGN KEY (owner_id) REFERENCES users(id)
 );
+
+CREATE TABLE sinistres (
+    id BIGSERIAL PRIMARY KEY ,
+    vehicle_id BIGINT NOT NULL REFERENCES vehicles(id),
+    type VARCHAR(50) NOT NULL,
+    status VARCHAR(50) NOT NULL,
+    declaration_date TIMESTAMP NOT NULL,
+    location VARCHAR(255) NOT NULL,
+    description VARCHAR(1024) NOT NULL
+);
+
