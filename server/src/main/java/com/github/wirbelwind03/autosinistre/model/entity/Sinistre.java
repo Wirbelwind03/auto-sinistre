@@ -1,7 +1,7 @@
 package com.github.wirbelwind03.autosinistre.model.entity;
 
-import com.github.wirbelwind03.autosinistre.model.enums.StatusSinistreEnum;
-import com.github.wirbelwind03.autosinistre.model.enums.TypeSinistreEnum;
+import com.github.wirbelwind03.autosinistre.model.enums.sinistre.SinistreStatusEnum;
+import com.github.wirbelwind03.autosinistre.model.enums.sinistre.SinistreTypeEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,20 +22,23 @@ public class Sinistre {
     private long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "client_id", nullable = false)
-    private User client;
+    @JoinColumn(name = "vehicle_id", nullable = false)
+    private Vehicle vehicle;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private TypeSinistreEnum type;
+    private SinistreTypeEnum type;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private StatusSinistreEnum status;
+    private SinistreStatusEnum status;
+
+    @Column(nullable = false)
+    private LocalDateTime declarationDate;
 
     @Column(nullable = false)
     private String location;
 
     @Column(nullable = false)
-    private LocalDateTime declarationDate;
+    private String description;
 }
