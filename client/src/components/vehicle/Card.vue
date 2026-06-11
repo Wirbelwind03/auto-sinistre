@@ -1,13 +1,13 @@
 <style scoped>
 .car-visual {
-  height: 110px;
+  aspect-ratio: 16 / 9;
   background: #e3f2fd;
   border-radius: 12px 12px 0 0;
   overflow: hidden;
 }
 
 .car-visual-empty {
-  height: 110px;
+  aspect-ratio: 16 / 9;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -16,13 +16,12 @@
 </style>
 
 <template>
-    <v-card class="vehicle-card" rounded="xl" elevation="1" border @click="openDetail(v)">
+    <v-card class="vehicle-card" rounded="xl" elevation="1" border @click="emit('open-detail', vehicle)">
         <!-- Car visual header -->
         <div class="car-visual">
             <v-img
                 v-if="vehicle.photoUrl"
                 :src="vehicle.photoUrl"
-                height="110"
                 cover
             >
                 <template v-slot:error>
@@ -61,15 +60,15 @@
             </div>
 
             <!-- Actions -->
-            <div class="d-flex ga-2">
+            <div class="d-flex ga-2 align-center">
             <v-btn
                 variant="flat"
                 color="blue-darken-3"
                 size="small"
                 rounded="lg"
-                class="flex-grow-1 font-weight-bold"
+                class="flex-grow-1 font-weight-bold text-uppercase"
                 prepend-icon="mdi-alert-plus"
-                @click.stop="openDeclaration(v)"
+                @click.stop="emit('open-declaration', vehicle)"
             >
                 Déclarer
             </v-btn>
@@ -79,16 +78,16 @@
                 size="small"
                 rounded="lg"
                 icon="mdi-eye"
-                @click.stop="openDetail(v)"
+                @click.stop="emit('open-detail', vehicle)"
             ></v-btn>
-            <v-btn
+            <!--<v-btn
                 variant="outlined"
                 color="grey"
                 size="small"
                 rounded="lg"
                 icon="mdi-pencil"
-                @click.stop="openEdit(v)"
-            ></v-btn>
+                @click.stop="emit('open-edit', vehicle)"
+            ></v-btn>-->
             </div>
         </v-card-text>
     </v-card>
