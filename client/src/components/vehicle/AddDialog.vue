@@ -24,6 +24,7 @@
         <v-text-field
           v-model="addVehicleForm.licensePlate" 
           :error-messages="addVehicleFormErrors.licensePlate"
+          @input="onEnter"
           label="Plaque d'immatriculation"
           variant="outlined"
           density="comfortable"
@@ -132,14 +133,14 @@
 
       <!-- Buttons -->
       <v-card-actions class="pa-4 ga-2">
-        <v-btn variant="outlined" rounded="lg" color="grey" @click="$emit('show-register-form')">Annuler</v-btn>
+        <v-btn variant="outlined" rounded="lg" class="text-uppercase" color="grey" @click="$emit('show-register-form')">Annuler</v-btn>
         <v-spacer></v-spacer>
         <v-btn 
           variant="flat" 
           color="blue-darken-3" 
           rounded="lg" 
           prepend-icon="mdi-check" 
-          class="font-weight-bold" 
+          class="font-weight-bold text-uppercase" 
           @click="addVehicle">
           Enregistrer
         </v-btn>
@@ -166,7 +167,6 @@ const addVehicleForm = reactive({
   brand: null,
   model: '',
   year: null,
-  fuel: '',
   color: '',
   fuelType: '',
   vin: null,
@@ -235,6 +235,7 @@ onMounted(async() => {
 
 const addVehicleFormHasErrors = ref(false)
 function validateAddVehicleForm(){
+  console.log(addVehicleForm)
   addVehicleFormHasErrors.value = false
 
   Object.keys(addVehicleForm).forEach(key => {
@@ -244,6 +245,28 @@ function validateAddVehicleForm(){
     }
   })
 
+  let regex = /[A-Z]+-[0-9]+-[A-Z]+/i;
+  if (!regex.test(addVehicleForm.licensePlate)){
+      addVehicleFormErrors.licensePlate = 'Le format doit être : XX-000-XX'
+      return false
+  }
+
   return true
+}
+
+function onEnter(){
+  /*if (addVehicleForm.licensePlate.length <= 2 || addVehicleForm.licensePlate.length >= 7){
+    addVehicleForm.licensePlate = addVehicleForm.licensePlate.toUpperCase()
+  }
+
+  if (addVehicleForm.licensePlate.length > 3 && addVehicleForm.licensePlate.length < 7){
+    if(!/^\d+$/.test(addVehicleForm.licensePlate.slice(-1))){
+      addVehicleForm.licensePlate = addVehicleForm.licensePlate.slice(0, -1)
+    }
+  }
+
+  if (addVehicleForm.licensePlate.length == 2 || addVehicleForm.licensePlate.length == 6){
+    addVehicleForm.licensePlate += '-'
+  }*/
 }
 </script>
