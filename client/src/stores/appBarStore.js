@@ -1,6 +1,5 @@
 import { defineStore } from "pinia"
 import { ref, computed, reactive } from 'vue'
-import api from '@/services/api'
 
 export const useAppBarStore = defineStore('appBar', () => {
     const title = ref('')
