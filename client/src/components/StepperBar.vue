@@ -27,15 +27,6 @@
             </div>
             <v-icon v-if="i < steps.length - 1" color="blue-lighten-3" size="16">mdi-chevron-right</v-icon>
             </template>
-
-            <v-spacer></v-spacer>
-
-            <v-btn size="small" variant="outlined" color="white" class="mr-2" :disabled="currentStep === 0" @click="currentStep--">
-            Précédent
-            </v-btn>
-            <v-btn size="small" color="yellow-accent-3" variant="flat" class="text-black font-weight-bold" :disabled="currentStep === steps.length - 1" @click="currentStep++">
-            Suivant
-            </v-btn>
         </div>
     </v-sheet>
 </template>
@@ -48,5 +39,6 @@ const props = defineProps({
     type: Array,
     required: true
   },
+  currentStep: { type: Number, required: true }
 })
 </script>
