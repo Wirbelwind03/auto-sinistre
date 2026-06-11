@@ -41,7 +41,7 @@
             <!-- Plate + model -->
             <div class="d-flex align-start justify-space-between mb-2">
             <div>
-                <div class="text-body-1 font-weight-black text-blue-darken-1">{{ vehicle.brand.name }} {{ vehicle.model }}</div>
+                <div class="text-body-1 font-weight-black text-blue-darken-1">{{ vehicle.brand }} {{ vehicle.model }}</div>
                 <div class="text-caption text-medium-emphasis">{{ vehicle.year }}</div>
             </div>
             <v-chip class="plate-badge" color="blue-darken-4" variant="flat" size="small">
