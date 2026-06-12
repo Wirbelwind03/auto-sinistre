@@ -6,7 +6,7 @@
 
   .type-card { cursor: pointer; transition: all .2s !important; border: 2px solid transparent !important; }
   .type-card:hover { border-color: #1565c0 !important; transform: translateY(-2px); }
-  .type-card.selected { border-color: #1565c0 !important; background: #e3f2fd !important; }
+  .type-card.selected { border-color: #1565c0 !important; background: #282B2D !important; }
 </style>
 
 <template>
@@ -32,10 +32,10 @@
                 <v-col v-for="type in sinistreStore.types" :key="type.value" cols="4">
                     <v-card
                     rounded="lg"
-                    :class="['type-card', selectedType === type.value ? 'selected' : '']"
+                    :class="['type-card', sinistreFormStore.type === type.value ? 'selected' : '']"
                     elevation="0"
                     border
-                    @click="selectedType = type.value"
+                    @click="sinistreFormStore.type = type.value"
                     >
                     <v-card-text class="text-center pa-4">
                         <v-icon :color="type.color" size="32" class="mb-2">{{ type.icon }}</v-icon>
@@ -48,7 +48,7 @@
 
             <div class="mt-5">
             <div class="text-caption font-weight-bold text-medium-emphasis text-uppercase mb-3">Sévérité estimée *</div>
-            <v-btn-toggle v-model="selectedSeverity" rounded="lg" color="white" divided>
+            <v-btn-toggle v-model="sinistreFormStore.severity" rounded="lg" color="white" divided>
                 <v-btn value="FAIBLE" color="success" variant="outlined" class="font-weight-bold">
                 <v-icon start>mdi-circle-small</v-icon> Faible
                 </v-btn>
@@ -69,6 +69,9 @@ import { onMounted, ref, computed, watch } from 'vue'
 
 import { useStepperBarStore } from '@/stores/stepperBarStore'
 import { useSinistreStore } from '@/stores/sinistreStore'
+import { useSinistreFormStore } from '@/stores/sinistreFormStore'
+
+const sinistreFormStore = useSinistreFormStore()
 
 const sinistreStore = useSinistreStore()
 
@@ -89,9 +92,7 @@ onMounted(async() => {
 
 const stepperBarStore = useStepperBarStore()
 
-const selectedType = ref('')
-const selectedSeverity = ref('')
-watch([selectedType, selectedSeverity], ([type, severity]) => {
+watch([() => sinistreFormStore.type, () => sinistreFormStore.severity], ([type, severity]) => {
   if (type != '' && severity != ''){
     if (stepperBarStore.currentStep < 3){
       stepperBarStore.currentStep = 3

@@ -14,7 +14,7 @@
         <v-row>
             <v-col cols="6">
             <v-autocomplete
-                v-model="selectedLicensePlate"
+                v-model="sinistreForm.licensePlate"
                 :items="vehicleStore.vehicles"
                 label="Plaque d'immatriculation *"
                 item-title="licensePlate"
@@ -22,7 +22,6 @@
                 variant="outlined"
                 density="comfortable"
                 prepend-inner-icon="mdi-card-account-details"
-                placeholder="XX-000-XX"
                 :style="{fontFamily: 'Nunito', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase'}"
                 persistent-hint
                 color="blue-darken-2"
@@ -32,7 +31,7 @@
         </v-row>
 
         <!-- Informations du véhicule -->
-        <v-card v-if="selectedVehicle" rounded="lg" color="green-lighten-5" class="vehicle-found-card mt-1" elevation="0">
+        <v-card v-if="selectedVehicle" rounded="lg" color="#15311E" class="vehicle-found-card mt-1" elevation="0">
             <v-card-text class="d-flex align-center ga-3 pa-4">
             <v-avatar color="green-lighten-3" rounded="lg" size="44">
                 <v-icon color="green-darken-2" size="24">mdi-car-hatchback</v-icon>
@@ -41,7 +40,7 @@
                 <div class="font-weight-bold text-body-2">{{selectedVehicle.brand}} {{selectedVehicle.model}} · {{selectedVehicle.color}}</div>
                 <div class="text-caption text-medium-emphasis">{{selectedVehicle.year}} · {{selectedVehicle.fuelType}}</div>
             </div>
-            <v-chip color="success" size="small" prepend-icon="mdi-check-circle" variant="flat">Véhicule trouvé</v-chip>
+            <v-chip color="#3D8C40" size="small" prepend-icon="mdi-check-circle" variant="flat">Véhicule trouvé</v-chip>
             </v-card-text>
         </v-card>
         </v-card-text>
@@ -53,9 +52,12 @@ import { onMounted, ref, computed, watch } from 'vue'
 
 import { useVehicleStore } from '@/stores/vehicleStore.js'
 import { useStepperBarStore } from '@/stores/stepperBarStore'
+import { useSinistreFormStore } from '@/stores/sinistreFormStore'
 
 const vehicleStore = useVehicleStore()
 const stepperBarStore = useStepperBarStore()
+
+const sinistreForm = useSinistreFormStore()
 
 onMounted(async() => {
     await vehicleStore.getUserVehicles()
@@ -67,12 +69,12 @@ onMounted(async() => {
     })
 })
 
-const selectedLicensePlate = ref('')
 const selectedVehicle = computed(() =>
-  vehicleStore.vehicles.find(vehicle => vehicle.licensePlate === selectedLicensePlate.value)
+  vehicleStore.vehicles.find(vehicle => vehicle.licensePlate === sinistreForm.licensePlate)
 )
-watch(selectedVehicle, (val) => {
-  if (val != null && stepperBarStore.currentStep < 2){
+watch(selectedVehicle, (vehicle) => {
+  if (vehicle != null && stepperBarStore.currentStep < 2){
+    sinistreForm.vehicle = vehicle
     stepperBarStore.currentStep = 2
   }
   else {
