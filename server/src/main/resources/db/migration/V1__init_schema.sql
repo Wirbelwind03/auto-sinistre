@@ -39,8 +39,9 @@ CREATE TABLE vehicles (
 CREATE TABLE sinistres (
     id BIGSERIAL PRIMARY KEY ,
     vehicle_id BIGINT NOT NULL REFERENCES vehicles(id),
-    type VARCHAR(50) NOT NULL,
     status VARCHAR(50) NOT NULL,
+    type VARCHAR(50) NOT NULL,
+    severity VARCHAR(64) NOT NULL,
     declaration_date TIMESTAMP NOT NULL,
     location VARCHAR(255) NOT NULL,
     description VARCHAR(1024) NOT NULL

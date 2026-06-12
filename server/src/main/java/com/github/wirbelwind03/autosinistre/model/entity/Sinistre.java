@@ -1,5 +1,6 @@
 package com.github.wirbelwind03.autosinistre.model.entity;
 
+import com.github.wirbelwind03.autosinistre.model.enums.sinistre.SinistreSeverityEnum;
 import com.github.wirbelwind03.autosinistre.model.enums.sinistre.SinistreStatusEnum;
 import com.github.wirbelwind03.autosinistre.model.enums.sinistre.SinistreTypeEnum;
 import jakarta.persistence.*;
@@ -27,11 +28,15 @@ public class Sinistre {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    private SinistreStatusEnum status;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private SinistreTypeEnum type;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private SinistreStatusEnum status;
+    private SinistreSeverityEnum severity;
 
     @Column(nullable = false)
     private LocalDateTime declarationDate;
