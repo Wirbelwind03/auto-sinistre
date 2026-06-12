@@ -4,22 +4,27 @@
 <template>
   <v-dialog v-model="addDialog" max-width="560">
     <v-card rounded="xl">
+      <!-- En-tête -->
       <v-card-title class="d-flex align-center ga-3 pa-6 pb-4">
         <v-avatar color="blue-darken-2" rounded="lg" size="38">
-          <v-icon color="white">mdi-car-plus</v-icon>
+          <v-icon color="white">mdi-car</v-icon>
         </v-avatar>
         <div>
-          <div class="text-h6 font-weight-black" style="color:#0d1b4b">Nouveau véhicule</div>
+          <div class="text-h6 font-weight-black">Nouveau véhicule</div>
           <div class="text-caption text-medium-emphasis">Enregistrer un véhicule assuré</div>
         </div>
         <v-spacer></v-spacer>
         <v-btn icon="mdi-close" variant="text" size="small" @click="addDialog = false"></v-btn>
       </v-card-title>
+
       <v-divider></v-divider>
+
+      <!-- Formulaire -->
       <v-card-text class="pa-6">
         <v-text-field
           v-model="addVehicleForm.licensePlate" 
-          label="Plaque d'immatriculation *"
+          :error-messages="addVehicleFormErrors.licensePlate"
+          label="Plaque d'immatriculation"
           variant="outlined"
           density="comfortable"
           rounded="lg"
@@ -40,7 +45,7 @@
               item-title="name"
               item-value="id"
               :loading="loadingBrands"
-              label="Marque *" 
+              label="Marque" 
               variant="outlined" 
               density="comfortable" 
               rounded="lg" 
@@ -52,7 +57,7 @@
           <v-col cols="6">
             <v-text-field 
               v-model="addVehicleForm.model" 
-              label="Modèle *" 
+              label="Modèle" 
               variant="outlined" 
               density="comfortable" 
               rounded="lg" 
@@ -64,8 +69,8 @@
         <v-row>
           <v-col cols="4">
             <v-select
-              v-model="addVehicleForm.year" 
-              label="Année *"
+              v-model="addVehicleForm.year"
+              label="Année"
               :items="years"
               variant="outlined"
               density="comfortable"
@@ -76,7 +81,7 @@
           <v-col cols="4">
             <v-select 
               v-model="addVehicleForm.fuelType" 
-              label="Carburant *" 
+              label="Carburant" 
               :items="vehicleStore.fuelTypes"
               item-title="label"
               item-value="value"
@@ -117,10 +122,15 @@
           label="Kilométrage actuel" 
           type="number" 
           min="0"
-          variant="outlined" density="comfortable" rounded="lg" prepend-inner-icon="mdi-speedometer" color="blue-darken-2" suffix="km"></v-text-field>
+          variant="outlined" density="comfortable" rounded="lg" prepend-inner-icon="mdi-speedometer" color="blue-darken-2" suffix="km"
+        ></v-text-field>
+     
+        <span v-if="addVehicleFormHasErrors" class="font-weight-bold text-red">Veuillez remplir tous les champs</span>
       </v-card-text>
-
+  
       <v-divider></v-divider>
+
+      <!-- Buttons -->
       <v-card-actions class="pa-4 ga-2">
         <v-btn variant="outlined" rounded="lg" color="grey" @click="$emit('show-register-form')">Annuler</v-btn>
         <v-spacer></v-spacer>
@@ -130,7 +140,7 @@
           rounded="lg" 
           prepend-icon="mdi-check" 
           class="font-weight-bold" 
-          @click="addDialog = false; addVehicle()">
+          @click="addVehicle">
           Enregistrer
         </v-btn>
       </v-card-actions>
@@ -163,7 +173,17 @@ const addVehicleForm = reactive({
   mileage: null
 })
 
+const addVehicleFormErrors = reactive({
+  licensePlate: '',
+})
+
+const addVehicleLoading = ref(false)
 function addVehicle(){
+  if (!validateAddVehicleForm()){
+    return
+  }
+
+  addVehicleLoading.value = true
   vehicleStore.addVehicle(
     addVehicleForm.brand,
     addVehicleForm.model,
@@ -173,6 +193,15 @@ function addVehicle(){
     addVehicleForm.fuelType,
     addVehicleForm.vin
   )
+  .then(() => {
+    addDialog.value = false
+  })
+  .catch((e) => {
+      if (e.response?.status === 409){
+        addVehicleFormErrors.licensePlate = "Plaque d'immatriculation déjà utilisé"
+      }
+  })
+  .finally(() => { addVehicleLoading.value = false })
 }
 
 const selectedBrand = ref('')
@@ -203,4 +232,18 @@ onMounted(async() => {
     })
     .finally(() => loadingBrands.value = false)
 })
+
+const addVehicleFormHasErrors = ref(false)
+function validateAddVehicleForm(){
+  addVehicleFormHasErrors.value = false
+
+  Object.keys(addVehicleForm).forEach(key => {
+    if (addVehicleForm[key] == '' || addVehicleForm[key] == null) {
+      addVehicleFormHasErrors.value = true
+      return false
+    }
+  })
+
+  return true
+}
 </script>

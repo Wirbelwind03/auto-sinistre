@@ -49,6 +49,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/brand/**").permitAll()
                         .requestMatchers("/api/vehicle/**").authenticated()
+                        .requestMatchers("/api/sinistre/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess

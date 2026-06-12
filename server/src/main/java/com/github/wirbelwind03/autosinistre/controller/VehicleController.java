@@ -2,6 +2,7 @@ package com.github.wirbelwind03.autosinistre.controller;
 
 import com.github.wirbelwind03.autosinistre.model.dto.request.FuelTypeRequestDTO;
 import com.github.wirbelwind03.autosinistre.model.dto.request.VehicleAddRequestDTO;
+import com.github.wirbelwind03.autosinistre.model.dto.response.GetVehicleResponseDTO;
 import com.github.wirbelwind03.autosinistre.model.entity.User;
 import com.github.wirbelwind03.autosinistre.model.entity.Vehicle;
 import com.github.wirbelwind03.autosinistre.model.enums.FuelTypeEnum;
@@ -31,7 +32,7 @@ public class VehicleController {
     }
 
     @GetMapping("/my-vehicles")
-    public ResponseEntity<List<Vehicle>> getMyVehicles(Authentication authentication){
+    public ResponseEntity<List<GetVehicleResponseDTO>> getMyVehicles(Authentication authentication){
         User owner = (User)authentication.getPrincipal();
         return ResponseEntity.ok(vehicleService.getVehiculesByUser(owner.getId()));
     }

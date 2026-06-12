@@ -32,7 +32,7 @@
             
 
             <v-list-subheader>SINISTRES</v-list-subheader>
-            <v-list-item prepend-icon="mdi-alert-circle" title="Déclarations" value="declarations" rounded="lg"></v-list-item>
+            <v-list-item to="/sinistre" prepend-icon="mdi-alert-circle" title="Déclarations" value="declarations" rounded="lg"></v-list-item>
             <v-list-item prepend-icon="mdi-magnify" title="Suivi" value="suivi" rounded="lg"></v-list-item>
             <v-list-item prepend-icon="mdi-history" title="Historique" value="historique" rounded="lg"></v-list-item>
             
