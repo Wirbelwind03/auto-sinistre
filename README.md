@@ -14,6 +14,12 @@ Application web full-stack de gestion et d'analyse des sinistres automobiles.
 | Base de données | PostgreSQL |
 | Conteneurisation | Docker, Docker Compose |
 
+## APIs Utilisées
+
+- [API Adresse](https://www.data.gouv.fr/dataservices/api-adresse-base-adresse-nationale-ban)
+  
+Pour obtenir les lieux plus précisement. Par exemple lors de la déclaration du sinistre.
+
 ## Installation 
 
 ### Prérequis
