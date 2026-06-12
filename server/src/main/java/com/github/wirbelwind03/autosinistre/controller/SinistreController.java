@@ -1,7 +1,9 @@
 package com.github.wirbelwind03.autosinistre.controller;
 
+import com.github.wirbelwind03.autosinistre.model.dto.request.EnumRequestDTO;
 import com.github.wirbelwind03.autosinistre.model.dto.request.FuelTypeRequestDTO;
 import com.github.wirbelwind03.autosinistre.model.dto.request.SinistreTypeRequestDTO;
+import com.github.wirbelwind03.autosinistre.model.enums.sinistre.DamagedPieceEnum;
 import com.github.wirbelwind03.autosinistre.model.enums.sinistre.SinistreTypeEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -29,5 +31,16 @@ public class SinistreController {
                 )
                 .toList();
         return ResponseEntity.ok(sinistreTypes);
+    }
+
+    @GetMapping("/damaged-pieces")
+    public ResponseEntity<List<EnumRequestDTO>> getDamagedPieces(){
+        List<EnumRequestDTO> damagedPieces = Arrays.stream(DamagedPieceEnum.values())
+                .map(e -> new EnumRequestDTO(
+                        e.name(),
+                        e.getLabel())
+                )
+                .toList();
+        return ResponseEntity.ok(damagedPieces);
     }
 }
